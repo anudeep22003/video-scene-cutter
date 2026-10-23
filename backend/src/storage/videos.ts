@@ -1,18 +1,18 @@
-import { Prisma } from "../generated/prisma/client.js";
-import { getPrisma } from "./prisma.js";
+import { Prisma } from "../generated/prisma/client.js"
+import { getPrisma } from "./prisma.js"
 
 export class VideoStorage {
   async createOrRecover(data: Prisma.VideoCreateInput) {
-    const prisma = getPrisma();
+    const prisma = getPrisma()
     try {
-      const video = await prisma.video.create({ data });
-      return { video, created: true };
+      const video = await prisma.video.create({ data })
+      return { video, created: true }
     } catch (error) {
       if (
         !(error instanceof Prisma.PrismaClientKnownRequestError) ||
         error.code !== "P2002"
       ) {
-        throw error;
+        throw error
       }
       // The unique constraint arbitrates simultaneous registrations of one file.
       const video = await prisma.video.findUnique({
@@ -22,13 +22,13 @@ export class VideoStorage {
             fileHash: data.fileHash,
           },
         },
-      });
-      if (!video) throw error;
-      return { video, created: false };
+      })
+      if (!video) throw error
+      return { video, created: false }
     }
   }
 
   async findById(id: string) {
-    return getPrisma().video.findUnique({ where: { id } });
+    return getPrisma().video.findUnique({ where: { id } })
   }
 }
