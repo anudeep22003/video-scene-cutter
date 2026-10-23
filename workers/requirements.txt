@@ -1,1 +1,6 @@
 scenedetect-headless==0.7.1
+click==8.5.0
+numpy==2.5.4
+opencv-python-headless==5.0.0.93
+platformdirs==4.13.5
+tqdm==4.70.1
