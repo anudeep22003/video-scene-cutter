@@ -26,7 +26,8 @@ previews, cloud storage, and the end-to-end processing flow still need integrati
 
 ## Run locally
 
-Install Node 22.12+ (or a newer LTS supported by the dependencies), npm, Python 3.12,
+Use Node 22 (22.13+), npm, and Python 3.12, as declared in `.nvmrc` and `.python-version`.
+Run `nvm install && nvm use` if you use nvm. Install
 Docker with Compose, and FFmpeg/ffprobe on your PATH. Start the Docker engine first.
 Docker currently runs only PostgreSQL; the API and frontend run on your machine.
 
@@ -114,14 +115,25 @@ After installing backend, frontend, and worker dependencies, run from the root:
 
 ```sh
 make format          # Prettier for TypeScript; Ruff for Python
-make check           # Backend checks/build plus worker lint and media tests
+make check           # Formatting, lint, types, tests, and builds across the project
+make backend-check   # Backend checks alone
+make frontend-check  # Frontend checks alone
 make workers-check   # Worker checks alone; requires FFmpeg/ffprobe
-npm run lint --prefix frontend
-npm run build --prefix frontend
 ```
 
-`make check` does not include frontend checks. Backend tests use injected database
-storage; worker tests use real PySceneDetect/FFmpeg with generated videos and local
+Formatting rules are committed in the root `prettier.config.mjs`; the frontend
+extends them with Tailwind class sorting. `.editorconfig` provides editor defaults,
+including tabs for Makefiles and four spaces for Python. ESLint checks both
+TypeScript projects, and Ruff settings live in `workers/pyproject.toml`.
+These rules are shared project settings; editor extensions and format-on-save
+remain personal choices. No Git hooks or editor-specific settings are required.
+
+GitHub Actions runs `make check` on pull requests and pushes to `main`, using the
+declared Node/Python versions. It installs FFmpeg and needs no cloud credentials
+or running database. Frontend typechecking checks both referenced TS projects.
+
+Backend tests use injected database storage; worker tests use real
+PySceneDetect/FFmpeg with generated videos and local
 substitutes for cloud storage. These tests do not verify live Neon or S3 integration.
 
 ## Remaining integration and deployment

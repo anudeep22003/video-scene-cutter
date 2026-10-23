@@ -56,7 +56,8 @@ The retry ledger avoids re-encoding completed clips, but ZIP rebuilding restarts
 
 ## Local verification
 
-Install Python 3.12 and FFmpeg/ffprobe on your PATH, then from the repository root:
+Install Python 3.12 (declared in the root `.python-version`) and FFmpeg/ffprobe on
+your PATH, then from the repository root:
 
 ```sh
 make workers-install
@@ -65,6 +66,7 @@ make workers-check
 ```
 
 `make format` and `make check` also include workers once dependencies are installed.
+Ruff's target version and line length are committed in `workers/pyproject.toml`.
 Tests generate a tiny two-scene video with FFmpeg, run actual detection/slicing,
 and substitute local files for cloud storage. They verify single-scene handling,
 checkpoint reuse, ZIP contents, invalid cuts, and cleanup after an upload failure.

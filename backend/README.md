@@ -5,7 +5,7 @@ metadata example, not the upload/processing pipeline.
 
 ## Run locally
 
-Use Node 22.12+ (or a Prisma-supported newer LTS release), npm, and a running Docker
+Use Node 22 (22.13+, declared in the root `.nvmrc`), npm, and a running Docker
 engine with Docker Compose.
 
 ```sh
@@ -91,7 +91,10 @@ access to its public status response; there is no account or session authorizati
 ## Verify and package
 
 From the repository root, `make format` formats both projects and `make check`
-runs backend schema validation, typechecking, tests, formatting checks, and build.
+runs formatting checks, linting, typechecking, tests, and builds across the project.
+Use `make backend-check` for backend schema validation, ESLint, TypeScript checks,
+tests, formatting checks, and build alone. Install worker dependencies before
+running the full check; see the worker guide. Prettier inherits the root config.
 Tests use injected storage; they do not verify live database queries or migrations.
 
 `npm run build` generates Prisma and creates an ESM Lambda bundle targeting Node 22.
