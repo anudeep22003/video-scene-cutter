@@ -1,21 +1,37 @@
 # Backend scaffold
 
-Hono + TypeScript API with Prisma 7 and the Neon driver adapter. This is a working
+Hono + TypeScript API with Prisma 7 and PostgreSQL/Neon driver adapters. This is a working
 metadata example, not the upload/processing pipeline.
 
 ## Run locally
 
-Use Node 22.12+ (or a Prisma-supported newer LTS release) and npm.
+Use Node 22.12+ (or a Prisma-supported newer LTS release), npm, and a running Docker
+engine with Docker Compose.
 
 ```sh
+# From the repository root:
+make db-up
 cd backend
 npm ci
 cp .env.example .env
-# Set DATABASE_URL (pooled Neon URL) and DIRECT_URL (direct URL) in .env.
 npm run generate
 npm run db:deploy
 npm run dev
 ```
+
+The root `compose.yaml` runs PostgreSQL 17 on `localhost:5432`, with local-only
+database, user, and password all set to `video_slicer`. The port binds only to
+loopback. `make db-up` waits for database readiness; migrations remain explicit.
+If you already have a `.env`, update its database settings to match `.env.example`
+rather than overwriting any other configuration.
+
+From the repository root, `make db-down` stops the database and preserves data in
+the named Docker volume; `make db-logs` follows its logs. If port 5432 is already
+occupied, change the published port in `compose.yaml` and both URLs in `.env`.
+
+`DATABASE_DRIVER=postgres` selects the TCP PostgreSQL adapter for Compose.
+For Neon, use `DATABASE_DRIVER=neon` with a pooled `DATABASE_URL` and a direct
+`DIRECT_URL`. The driver defaults to `neon` when unset for existing deployments.
 
 `db:deploy` applies checked-in migrations to the configured database. Use a
 development database. For subsequent schema changes, edit `prisma/schema.prisma`,
@@ -27,11 +43,11 @@ Migration development may require a separate shadow database with Neon.
 - `src/http/videos.ts`: request parsing, route parameters, HTTP status codes.
 - `src/services/videos.ts`: metadata validation, object naming, public responses.
 - `src/storage/videos.ts`: Prisma queries and unique-conflict recovery.
-- `src/storage/prisma.ts`: lazy, reusable Neon/Prisma client.
+- `src/storage/prisma.ts`: lazy, reusable PostgreSQL/Neon Prisma client.
 - `src/app.ts`: dependency wiring and consistent JSON errors.
 - `src/index.ts`: Lambda handler; `src/dev.ts`: local HTTP server and dotenv loading.
 
-Flow: HTTP route -> video service -> video storage -> Prisma -> Neon. Storage here
+Flow: HTTP route -> video service -> video storage -> Prisma -> PostgreSQL/Neon. Storage here
 means database persistence. Future S3 access should live in its own storage module,
 called by the service; routes should not contain Prisma or AWS SDK calls.
 The small injected storage dependency also allows service/HTTP tests without a DB.
@@ -74,7 +90,7 @@ access to its public status response; there is no account or session authorizati
 
 From the repository root, `make format` formats both projects and `make check`
 runs backend schema validation, typechecking, tests, formatting checks, and build.
-Tests use injected storage; they do not verify live Neon queries or migrations.
+Tests use injected storage; they do not verify live database queries or migrations.
 
 `npm run build` generates Prisma and creates an ESM Lambda bundle targeting Node 22.
 The bundle includes a `createRequire` bridge for bundled CommonJS dependencies.
