@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+
+# Build output and caches
+dist/
+build/
+out/
+.vite/
+.cache/
+*.tsbuildinfo
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+.aws/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Tests
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# AWS packaging and infrastructure state
+.aws-sam/
+.serverless/
+.cdk.staging/
+cdk.out/
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Local temporary files
+tmp/
+temp/
+*.tmp
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*.swo
