@@ -52,16 +52,12 @@ means database persistence. Future S3 access should live in its own storage modu
 called by the service; routes should not contain Prisma or AWS SDK calls.
 The small injected storage dependency also allows service/HTTP tests without a DB.
 
-### Why local imports end in `.js`
+### Local imports
 
-An import such as `./services/videos.js` resolves to `services/videos.ts` during
-TypeScript checking and through our tsx/esbuild tooling. The suffix follows the
-JavaScript output convention used by Node ES modules, whose relative imports
-require file extensions. There is no duplicate JavaScript source file to maintain.
-Our current bundled build also supports extensionless imports; `.js` is the chosen
-convention, not a requirement imposed by esbuild or `moduleResolution: Bundler`.
-See [TypeScript extension substitution](https://www.typescriptlang.org/docs/handbook/modules/reference#file-extension-substitution)
-and [Node ESM imports](https://nodejs.org/api/esm.html#mandatory-file-extensions).
+Use extensionless relative imports, such as `./services/videos`. TypeScript's
+`moduleResolution: Bundler`, tsx in development, and esbuild for Lambda packaging
+resolve these to the TypeScript source. Run the built bundle in Node; unbundled
+JavaScript with extensionless imports would need a different resolution setup.
 
 ## Try it
 

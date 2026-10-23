@@ -1,9 +1,9 @@
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { ZodError } from "zod"
-import { createVideoRoutes } from "./http/videos.js"
-import { VideoService } from "./services/videos.js"
-import { VideoStorage } from "./storage/videos.js"
+import { createVideoRoutes } from "./http/videos"
+import { VideoService } from "./services/videos"
+import { VideoStorage } from "./storage/videos"
 
 /** Wire routes and JSON error handling; accept a service so tests can avoid a DB. */
 export function createApp(service = new VideoService(new VideoStorage())) {
