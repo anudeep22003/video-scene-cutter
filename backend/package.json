@@ -3,20 +3,35 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
+    "build": "npm run generate && esbuild --bundle --outfile=./dist/index.js --platform=node --target=node22 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
     "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name hello",
-    "deploy": "run-s build zip update"
+    "deploy": "run-s build zip update",
+    "generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts",
+    "format": "prettier --write src prisma.config.ts README.md package.json tsconfig.json && prisma format",
+    "format:check": "prettier --check src prisma.config.ts README.md package.json tsconfig.json"
   },
   "devDependencies": {
     "@hono/node-server": "^2.1.5",
     "@types/node": "^26.1.1",
     "esbuild": "^0.28.1",
     "npm-run-all2": "^9.0.2",
-    "tsx": "^4.23.15"
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@hono/aws-lambda": "^1.0.0",
-    "hono": "^4.13.13"
+    "@prisma/adapter-neon": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "dotenv": "^18.0.9",
+    "hono": "^4.13.13",
+    "zod": "^4.6.7"
   }
 }
