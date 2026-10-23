@@ -5,6 +5,7 @@ import { createVideoRoutes } from "./http/videos.js"
 import { VideoService } from "./services/videos.js"
 import { VideoStorage } from "./storage/videos.js"
 
+/** Wire routes and JSON error handling; accept a service so tests can avoid a DB. */
 export function createApp(service = new VideoService(new VideoStorage())) {
   const app = new Hono()
 

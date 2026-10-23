@@ -4,6 +4,7 @@ import { PrismaClient } from "../generated/prisma/client.js"
 
 let prisma: PrismaClient | undefined
 
+/** Lazily reuse one DB client per process, including across warm Lambda requests. */
 export function getPrisma(): PrismaClient {
   if (prisma) return prisma
   const connectionString = process.env.DATABASE_URL

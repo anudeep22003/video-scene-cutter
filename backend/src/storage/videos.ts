@@ -2,6 +2,7 @@ import { Prisma } from "../generated/prisma/client.js"
 import { getPrisma } from "./prisma.js"
 
 export class VideoStorage {
+  /** Insert metadata, recovering the existing session/file record on a unique race. */
   async createOrRecover(data: Prisma.VideoCreateInput) {
     const prisma = getPrisma()
     try {

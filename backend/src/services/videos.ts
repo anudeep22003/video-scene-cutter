@@ -19,6 +19,7 @@ type VideoStore = Pick<VideoStorage, "createOrRecover" | "findById">
 export class VideoService {
   constructor(private readonly storage: VideoStore) {}
 
+  /** Validate declared metadata and create/recover a record; no upload starts yet. */
   async register(input: unknown) {
     const metadata = registrationSchema.parse(input)
     const id = randomUUID()
@@ -35,6 +36,7 @@ export class VideoService {
     return { created, video_id: video.id, status: video.status }
   }
 
+  /** Return JSON-safe public progress fields, or null for the route to map to 404. */
   async getById(id: string) {
     const video = await this.storage.findById(id)
     if (!video) return null
