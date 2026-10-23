@@ -28,7 +28,7 @@ export class VideoStorage {
     }
   }
 
-  findById(id: string) {
+  async findById(id: string) {
     return getPrisma().video.findUnique({ where: { id } });
   }
 }
