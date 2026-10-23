@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum VideoStatus {
+  UPLOADING
+  DETECTING
+  DETECTED
+  SLICING
+  COMPLETED
+  FAILED
+}
+
+model Video {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId       String      @map("session_id")
+  fileHash        String      @map("file_hash")
+  status          VideoStatus @default(UPLOADING)
+  errorMessage    String?     @map("error_message")
+  sizeBytes       BigInt      @map("size_bytes")
+  durationSec     Float       @map("duration_sec")
+  mimeType        String      @map("mime_type")
+  rawObjectKey    String      @unique @map("raw_object_key")
+  zipObjectKey    String?     @map("zip_object_key")
+  detectedCuts    Json?       @map("detected_cuts")
+  totalSlices     Int         @default(0) @map("total_slices")
+  slicesCompleted Int         @default(0) @map("slices_completed")
+  userEmail       String?     @map("user_email")
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  slices          Slice[]
+
+  @@unique([sessionId, fileHash])
+  @@map("videos")
+}
+
+model Slice {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  videoId    String   @map("video_id") @db.Uuid
+  sliceIndex Int      @map("slice_index")
+  objectKey  String   @map("object_key")
+  startSec   Float    @map("start_sec")
+  endSec     Float    @map("end_sec")
+  sizeBytes  BigInt   @map("size_bytes")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  video      Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([videoId, sliceIndex])
+  @@map("slices")
+}
