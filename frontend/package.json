@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "typecheck": "tsc -b --pretty false",
+    "preview": "vite preview",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -39,5 +40,8 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8",
     "vite": "^8"
+  },
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0"
   }
 }
