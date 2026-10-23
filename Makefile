@@ -1,4 +1,13 @@
-.PHONY: format check
+.PHONY: format check db-up db-down db-logs
+
+db-up:
+	docker compose up -d --wait postgres
+
+db-down:
+	docker compose down
+
+db-logs:
+	docker compose logs -f postgres
 
 format:
 	cd backend && npm run format
