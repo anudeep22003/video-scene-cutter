@@ -38,6 +38,7 @@ function getSystemTheme(): ResolvedTheme {
   return "light"
 }
 
+// Suppress CSS animations during a theme switch and return a deferred cleanup.
 function disableTransitionsTemporarily() {
   const style = document.createElement("style")
   style.appendChild(
@@ -48,6 +49,7 @@ function disableTransitionsTemporarily() {
   document.head.appendChild(style)
 
   return () => {
+    // Flush the theme change with transitions disabled, then restore them after paint.
     window.getComputedStyle(document.body)
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -57,6 +59,7 @@ function disableTransitionsTemporarily() {
   }
 }
 
+// Keep the theme shortcut from consuming keystrokes inside editable controls.
 function isEditableTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) {
     return false
@@ -76,6 +79,7 @@ function isEditableTarget(target: EventTarget | null) {
   return false
 }
 
+/** Persist the theme, follow OS changes in system mode, and enable the D shortcut. */
 export function ThemeProvider({
   children,
   defaultTheme = "system",
