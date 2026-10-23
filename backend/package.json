@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/dev.ts",
-    "build": "npm run generate && esbuild --bundle --outfile=./dist/index.js --platform=node --target=node22 ./src/index.ts",
+    "build": "npm run generate && esbuild --bundle --format=esm --banner:js='import { createRequire } from \"node:module\"; const require = createRequire(import.meta.url);' --outfile=./dist/index.js --platform=node --target=node22 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
     "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name hello",
     "deploy": "run-s build zip update",
@@ -12,7 +12,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/**/*.test.ts",
+    "test": "node --import tsx --test src/**/*.test.ts",
     "format": "prettier --write src prisma.config.ts README.md package.json tsconfig.json && prisma format",
     "format:check": "prettier --check src prisma.config.ts README.md package.json tsconfig.json"
   },

@@ -5,4 +5,4 @@ format:
 	cd frontend && npm run format
 
 check:
-	cd backend && npm run db:validate && npm run typecheck && npm test && npm run format:check && npm run build
+	cd backend && npm run generate && npm run db:validate && npm run typecheck && npm test && npm run format:check && npm run build
