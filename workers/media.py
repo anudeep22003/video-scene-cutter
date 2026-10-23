@@ -11,6 +11,11 @@ from workers.storage import Cut
 
 
 def probe_video(source: Path) -> float:
+    """Validate actual local media against V1 limits and return duration in seconds.
+
+    Reject unsupported containers or missing video streams regardless of what
+    the browser declared. ffprobe/process errors propagate to the caller.
+    """
     if not 0 < source.stat().st_size <= 500_000_000:
         raise ValueError("Video must be between 1 and 500,000,000 bytes")
     result = subprocess.run(
@@ -41,6 +46,7 @@ def probe_video(source: Path) -> float:
 
 
 def detect_cuts(source: Path) -> list[Cut]:
+    """Return zero-based scene intervals in seconds; no transitions means one scene."""
     scenes = detect(str(source), ContentDetector(), start_in_scene=True)
     if not scenes:
         raise ValueError("Video contains no decodable scenes")
@@ -51,6 +57,11 @@ def detect_cuts(source: Path) -> list[Cut]:
 
 
 def validate_cuts(cuts: list[Cut], duration: float, fps: float) -> None:
+    """Reject gaps, reordered indices, and cuts that do not span the whole input.
+
+    Allow one frame of end-time drift between ffprobe duration and detected
+    frame boundaries; adjacent cuts must still share the same boundary.
+    """
     if not cuts:
         raise ValueError("No persisted cuts to slice")
     previous_end = 0.0
@@ -70,6 +81,11 @@ def validate_cuts(cuts: list[Cut], duration: float, fps: float) -> None:
 
 
 def split_cut(source: Path, cut: Cut, fps: float, destination: Path) -> None:
+    """Encode one interval as H.264/AAC at destination, allowing silent sources.
+
+    Convert seconds back to source frame timecodes. A nonzero FFmpeg exit or a
+    missing/empty output raises before the caller can upload or checkpoint it.
+    """
     # One call per clip preserves the upload/checkpoint/delete boundary.
     result = split_video_ffmpeg(
         str(source),

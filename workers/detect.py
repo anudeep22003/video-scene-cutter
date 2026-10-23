@@ -9,6 +9,11 @@ from workers.media import detect_cuts, probe_video
 
 
 def handler(event: dict, context) -> dict:
+    """Resolve a video_id, validate its input, and persist/return virtual scene cuts.
+
+    Storage functions remain unwired. Exceptions propagate for Lambda retries;
+    this worker never produces physical clips.
+    """
     video_id = str(UUID(event["video_id"]))
     # WIRE: claim DETECTING ownership idempotently before doing expensive work.
     # Dispatch/retry code must record terminal failures and recover stale leases.

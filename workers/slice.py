@@ -12,6 +12,11 @@ from workers.media import probe_video, split_cut, validate_cuts
 
 
 def handler(event: dict, context) -> dict:
+    """Export persisted cuts, reusing checkpointed clips and rebuilding the ZIP.
+
+    Storage functions remain unwired. Publish the archive only after every clip
+    is available; propagate failures so a retry can resume from the slice ledger.
+    """
     video_id = str(UUID(event["video_id"]))
     # WIRE: claim SLICING ownership; prevent overlapping workers for one video.
     # Before deployment, add deadline-aware continuation with durable dispatch.
