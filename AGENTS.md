@@ -23,7 +23,7 @@ An unauthenticated application where users upload a video, discover scene bounda
 - Email: transactional provider, not yet selected. Frontend hosting and infrastructure tooling are also undecided.
 - Python is expected for PySceneDetect integration; frontend and API remain TypeScript. Worker runtime boundaries are an implementation decision to make explicitly.
 
-Current repository status: React and Hono starters exist. TanStack Query, Prisma, workers, storage, email, and infrastructure are planned, not implemented. Inspect package scripts before running commands; the backend's existing deploy script targets a function named `hello`.
+Current repository status: React starter plus Hono HTTP/service/database-storage scaffold exist. Prisma schema, initial migration, Neon adapter, registration/status endpoints, and example tests are implemented; see `backend/README.md`. TanStack Query, S3 integration, workers, email, and infrastructure remain planned. Inspect package scripts before running commands; the backend's existing deploy script targets a function named `hello`.
 
 ## V1 experience and constraints
 
