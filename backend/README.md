@@ -78,7 +78,9 @@ Metadata remains untrusted until a worker verifies the actual uploaded video.
 ## Extend next
 
 The sample intentionally omits upload/playback/download URLs, S3 notifications,
-slice-list and slicing endpoints, workers, email, session expiry, and asset expiry.
+slice-list and slicing endpoints, worker dispatch, email, session expiry, and asset expiry.
+Python detection/slicing scaffolds live in [`../workers/README.md`](../workers/README.md);
+their S3/database contact points still need wiring.
 Registration creates metadata only; it cannot upload or advance processing yet.
 Add real S3 signing to registration and status responses before connecting the SPA.
 Implement slicing only once job dispatch is available; do not return a fake `202`.
