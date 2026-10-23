@@ -1,8 +1,8 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { createApp } from "../app.js"
-import type { Video } from "../generated/prisma/client.js"
-import { VideoService } from "../services/videos.js"
+import { createApp } from "../app"
+import type { Video } from "../generated/prisma/client"
+import { VideoService } from "../services/videos"
 
 const id = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
 const input = {

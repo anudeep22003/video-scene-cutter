@@ -1,5 +1,5 @@
-import { Prisma } from "../generated/prisma/client.js"
-import { getPrisma } from "./prisma.js"
+import { Prisma } from "../generated/prisma/client"
+import { getPrisma } from "./prisma"
 
 export class VideoStorage {
   /** Insert metadata, recovering the existing session/file record on a unique race. */

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
 import { z } from "zod"
-import type { VideoStorage } from "../storage/videos.js"
+import type { VideoStorage } from "../storage/videos"
 
 const registrationSchema = z.object({
   session_id: z.uuid(),

@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { z } from "zod"
-import type { VideoService } from "../services/videos.js"
+import type { VideoService } from "../services/videos"
 
 /** Translate HTTP input and status codes; leave business rules to the service. */
 export function createVideoRoutes(service: VideoService) {
